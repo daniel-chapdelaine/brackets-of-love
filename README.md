@@ -24,7 +24,19 @@ Things you may want to cover:
 * ...
 
 
-## Help
+## Local Development
+You may want to install Ruby/Rails/Bundler and run the app locally
+OR
+Install Docker and do the following:
+```
+cd development/
+docker-compose run web bundle install
+docker-compose run web rails db:setup
+docker-compose build
+docker-compose up
+```
+
+## Help Links
 
 Installing mysql2 gem on windows https://github.com/brianmario/mysql2/issues/1210
 
