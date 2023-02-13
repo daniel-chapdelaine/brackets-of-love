@@ -22,3 +22,11 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
+## Help
+
+Installing mysql2 gem on windows https://github.com/brianmario/mysql2/issues/1210
+
+Docker Compose guide - https://salzam.com/create-and-dockerize-rails-application-with-mysql-and-sidekiq/
+- commands you may need can be run like `docker-compose run web rails db:migrate`
