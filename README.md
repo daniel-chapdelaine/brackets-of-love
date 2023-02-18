@@ -36,6 +36,14 @@ docker-compose build
 docker-compose up
 ```
 
+Update hosts file
+
+Install docker/kubectl/minikube
+Run `minikube start`
+Run `minikube addons enable ingress`
+Run `minikube tunnel`
+
+
 ## Help Links
 
 Installing mysql2 gem on windows https://github.com/brianmario/mysql2/issues/1210

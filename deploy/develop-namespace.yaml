@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: develop
+  labels:
+    name: develop
+
+# kubectl apply -f deploy/develop-namespace.yaml
+# kubectl get namespace
