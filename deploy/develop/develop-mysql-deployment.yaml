@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: develop-mysql
+  namespace: develop
+  labels:
+    app: develop-mysql
+    group: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: develop-mysql
+  template:
+    metadata:
+      labels:
+        app: develop-mysql
+        type: db
+    spec:
+      volumes:
+        - name: develop-mysql-config-volume ## volume name
+          configMap:
+            name: develop-mysql-config ## name of ConfigMap
+      containers:
+        - name: develop-mysql
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306 
+          envFrom:
+            - configMapRef:
+                name: develop-mysql-config
+          volumeMounts:                 # indicates which Volume (from spec.template.spec.volumes) should be used
+            - name: develop-mysql-config-volume ## specify volume name
+              mountPath: /etc/mysql/conf.d/default_auth.cnf ## path to mount file
+              subPath: default_auth ## name of config
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 256Mi

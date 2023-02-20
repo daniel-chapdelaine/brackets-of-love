@@ -19,23 +19,15 @@ spec:
     spec:
       containers:     # defines a running container inside the Pod
         - name: develop-app
-        # TODO: update the image
+          # TODO: Add our app here
           image: adminer:4.7.6-standalone
           ports:
             - containerPort: 8080   # which port of the container is exposed to the Pod
+          # TODO: Add app envs
           env:
-            - name: ADMINER_DESIGN # TODO: - fix
-              value: pepa-linha  # TODO: - fix
-            - name: ADMINER_DEFAULT_SERVER  # TODO: - fix
-              value: postgres  # TODO: - fix
+            # - name: SOME_NAME
+            #   value: some-value
           resources:
             limits:
               memory: "256Mi"
               cpu: "500m"
-              
-
-# kubectl apply -f deploy/develop-deployment.yaml
-# kubectl get deployments
-# kubectl describe deployment develop
-# kubectl get pods --namespace=develop
-# kubectl describe pod name-of-pod

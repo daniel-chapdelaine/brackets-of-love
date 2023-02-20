@@ -3,11 +3,11 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  port: <%= ENV['DB_PORT'] %>
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_ROOT_PASSWORD'] %>
+  # port: 3306
   host: <%= ENV['DB_HOST'] %>
-  database: <%= ENV['DB_NAME'] %>
+  database: <%= ENV['MYSQL_DB'] %>
   socket: /var/run/mysqld/mysqlx.sock
 
 development:
@@ -18,3 +18,23 @@ test:
 
 production:
   <<: *default
+
+
+# base: &base
+#   adapter: mysql2
+#   encoding: utf8mb4
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+# default: &default
+#   <<: *base
+#   # username: <%= ENV['DB_USERNAME'] %>
+#   # password: <%= ENV['DB_PASSWORD'] %>
+#   # host: <%= ENV['DB_HOST'] %>
+#   # database: <%= ENV['DB_NAME'] %>
+
+# development:
+#   <<: *base
+#   username: root
+#   password: password
+#   host: db
+#   database: db

@@ -38,13 +38,23 @@ docker-compose up
 
 Update hosts file
 
-Install docker/kubectl/minikube
-Run `minikube start`
-Run `minikube addons enable ingress`
-Run `minikube tunnel`
+Install docker/kubectl/minikube/kubectx/kubens
+1. Start minikube which create a kubernetes environment locally
+`minikube start`
+2. Enable minikube ingress to forward traffic. Only needs to be done your first time!
+`minikube addons enable ingress` 
+3. Start tunnel for port forwarding
+`minikube tunnel`
+4. Deploy kube files
+-- deploy script
+set up mini kube for local development https://www.honeybadger.io/blog/rails-on-kubernetes/
 
 
-## Help Links
+
+## Help
+
+How to get on a mysql pod `kubectl exec -it pod-name /bin/bash`
+How to get on a app pod `kubectl exec -it pod-name /bin/ash`
 
 Installing mysql2 gem on windows https://github.com/brianmario/mysql2/issues/1210
 
