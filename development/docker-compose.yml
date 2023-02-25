@@ -1,40 +1,41 @@
-version: "3.7"
+version: "3.8"
 services:
   db:
-    image: "mysql:8.0"
+    image: mysql:8.0
+    command: mysqld --default-authentication-plugin=caching_sha2_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: always
-    environment:
-     MYSQL_ROOT_PASSWORD: root
-     MYSQL_USERNAME: root
-     MYSQL_PASSWORD: root
-        - '3306:3306'
-    expose:
-      - '3306'
-    volumes:
-      - db:/var/run/mysqld
-    logging:
-            driver: none
     ports:
-      - "33061:3306"
-  web:
+      - '3306:3306'
+    volumes:
+      - db:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: kanban
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: kanban
+      MYSQL_DATABASE: local-brackets-of-love
+  app:
     build: ../
     command: bundle exec rails s -p 3000 -e development -b '0.0.0.0'
     environment:
-     DB_USERNAME: root
-     DB_PASSWORD: root
-     DB_NAME: brackets_of_love_db
-     DB_PORT: 3306
-     DB_HOST: db
-     RAILS_ENV: development
-     RAILS_MAX_THREADS: 5
-     BUNDLE_PATH: /bundle
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: kanban
+      DB_NAME: local-brackets-of-love
+
+      RAILS_MAX_THREADS: 5
+      BUNDLE_PATH: /bundle
     volumes:
-      - ../:/rails-app
+      - ../:/app
       - bundle:/bundle
     ports:
-      - "3000:3000"
+      - 3000:3000
     depends_on:
-      - "db"
+      - db
+    links:
+      - db
 volumes:
   db:
+    driver: local
   bundle:

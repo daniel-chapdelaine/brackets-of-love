@@ -30,8 +30,8 @@ OR
 Install Docker and do the following:
 ```
 cd development/
-docker-compose run web bundle install
-docker-compose run web rails db:setup
+docker-compose run app bundle install
+docker-compose run app rails db:setup
 docker-compose build
 docker-compose up
 ```
@@ -47,7 +47,15 @@ Install docker/kubectl/minikube/kubectx/kubens
 `minikube tunnel`
 4. Deploy kube files
 -- deploy script
-set up mini kube for local development https://www.honeybadger.io/blog/rails-on-kubernetes/
+
+https://medium.com/swlh/how-to-run-locally-built-docker-images-in-kubernetes-b28fbc32cc1d
+
+TODO
+
+  1. configure GCP for autopilot 
+  2. figure out if we can have two seperate host urls
+  3. when deploying dev don't forget to add:   
+      `config.hosts << "url-of-brackets-of-love.k8s.com" `
 
 
 

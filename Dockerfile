@@ -6,15 +6,15 @@ RUN apt-get clean all && apt-get update -qq && apt-get install -y build-essentia
     libssl-dev pkg-config openssl imagemagick file nodejs yarn
 
 
-RUN mkdir /rails-app
-WORKDIR /rails-app
+RUN mkdir /app
+WORKDIR /app
 
 # Adding gems
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
 RUN bundle install
 
-COPY . /rails-app
+COPY . /app
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
