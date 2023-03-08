@@ -13,7 +13,7 @@ services:
       MYSQL_ROOT_PASSWORD: kanban
       MYSQL_USERNAME: root
       MYSQL_PASSWORD: kanban
-      MYSQL_DATABASE: local-brackets-of-love
+      MYSQL_DATABASE: local_brackets_of_love
   app:
     build: ../
     command: bundle exec rails s -p 3000 -e development -b '0.0.0.0'
@@ -22,8 +22,7 @@ services:
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: kanban
-      DB_NAME: local-brackets-of-love
-
+      DB_NAME: local_brackets_of_love
       RAILS_MAX_THREADS: 5
       BUNDLE_PATH: /bundle
     volumes:

@@ -1,5 +1,4 @@
 apiVersion: networking.k8s.io/v1
-# TODO: Probably more to do here setting up when deployed
 kind: Ingress
 metadata:
   name: develop-ingress-service
@@ -8,8 +7,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-    - host: develop-brackets-of-love.k8s.com
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
@@ -17,4 +15,4 @@ spec:
               service:
                 name: develop-app
                 port:
-                  number: 8080
+                  number: 3000

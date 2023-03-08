@@ -5,7 +5,6 @@ metadata:
   namespace: develop
   labels:
     app: develop-app
-    group: db
 spec:
   replicas: 1
   selector:
@@ -15,18 +14,44 @@ spec:
     metadata:         # indicates the metadata that will be added to each Pod
       labels:
         app: develop-app
-        group: db
     spec:
+      # initContainers:
+      # - name: migrations
+      #   image: local/brackets-of-love:latest
+      #   command:
+      #   - rake
+      #   - db:abort_if_pending_migrations
+        
       containers:     # defines a running container inside the Pod
         - name: develop-app
           # TODO: Add our app here
-          image: adminer:4.7.6-standalone
+          image:  us.gcr.io/brackets-of-love-379100/develop:latest
+          imagePullPolicy: Always
+
+          # readinessProbe:
+          #   httpGet:
+          #     # httpHeaders:
+          #     # - name: Host
+          #     #   value: example.com
+          #     path: /robots.txt
+          #     port: 3000
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
+          #   timeoutSeconds: 2
           ports:
-            - containerPort: 8080   # which port of the container is exposed to the Pod
+            - containerPort: 3000   # which port of the container is exposed to the Pod
           # TODO: Add app envs
           env:
-            # - name: SOME_NAME
-            #   value: some-value
+          - name: DB_HOST
+            value: mysql
+          - name: DB_USER
+            value: root
+          - name: DB_PASSWORD
+            value: kanban
+          - name: DB_NAME
+            value: develop_brackets_of_love
+          - name: RAILS_ENV
+            value: develop
           resources:
             limits:
               memory: "256Mi"

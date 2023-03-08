@@ -50,13 +50,24 @@ Install docker/kubectl/minikube/kubectx/kubens
 
 https://medium.com/swlh/how-to-run-locally-built-docker-images-in-kubernetes-b28fbc32cc1d
 
+
+deploy and scripts
+https://skcript.com/svr/dockerize-a-rails-app-with-mysql-and-sidekiq/
+
+set up with k8
+https://medium.com/nycdev/deploy-to-a-managed-kubernetes-cluster-on-google-cloud-894d35b83619
+
 TODO
 
   1. configure GCP for autopilot 
   2. figure out if we can have two seperate host urls
   3. when deploying dev don't forget to add:   
       `config.hosts << "url-of-brackets-of-love.k8s.com" `
-
+  4. when pushing docker image to gcp, make a naming convention
+      1. `docker tag develop-brackets-of-love:latest us.gcr.io/$project-id/develop:0.1.0`
+      2. `docker push us.gcr.io/$project-id/develop:0.1.0`
+      3. probably need to use latest to pull image and github commit for history
+  5. google cloud budget
 
 
 ## Help

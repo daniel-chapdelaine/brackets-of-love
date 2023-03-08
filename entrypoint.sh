@@ -1,7 +1,15 @@
-#!/bin/bash
-set -e
+#! /bin/sh
+# unset BUNDLE_PATH
+# unset BUNDLE_BIN
 
-# Remove a potentially pre-existing server.pid for Rails.
-rm -f /rails-app/tmp/pids/server.pid
+# Wait for DB services
+# sh ./config/docker/wait-for-services.sh
 
-exec "$@"
+# Prepare DB (Migrate - If not? Create db & Migrate)
+# sh ./config/docker/prepare-db.sh
+
+# Pre-comple app assets
+# sh ./config/docker/asset-pre-compile.sh
+
+# Start Application
+bundle exec rails s

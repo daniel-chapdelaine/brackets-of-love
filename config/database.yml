@@ -3,11 +3,15 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV['DB_USER'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  database: <%= ENV['DB_NAME'] %>
+  username: root
+  password: kanban
+  database: develop_brackets_of_love
   host: <%= ENV['DB_HOST'] %>
-  port: <%= ENV['DB_PORT'] %>
+  port: 3306
+  #   username: <%= ENV['DB_USER'] %>
+  # password: <%= ENV['DB_PASSWORD'] %>
+  # database: <%= ENV['DB_NAME'] %>
+  # host: <%= ENV['DB_HOST'] %>
 
 development:
   <<: *default
@@ -15,25 +19,8 @@ development:
 test:
   <<: *default
 
-production:
+develop:
   <<: *default
 
-
-# base: &base
-#   adapter: mysql2
-#   encoding: utf8mb4
-#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
-# default: &default
-#   <<: *base
-#   # username: <%= ENV['DB_USERNAME'] %>
-#   # password: <%= ENV['DB_PASSWORD'] %>
-#   # host: <%= ENV['DB_HOST'] %>
-#   # database: <%= ENV['DB_NAME'] %>
-
-# development:
-#   <<: *base
-#   username: root
-#   password: password
-#   host: db
-#   database: db
+production:
+  <<: *default

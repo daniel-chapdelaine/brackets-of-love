@@ -4,11 +4,13 @@ metadata:
   name: develop-app
   namespace: develop
   labels: 
-    group: db
+    group: develop-db
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:             # indicates into which pods ClusterIP provides access
     app: develop-app
   ports:
-    - port: 8080          # port exposed outside ClusterIP
-      targetPort: 8080    # port exposed by Pod
+    - protocol: TCP
+      port: 3000          # port exposed outside ClusterIP
+      targetPort: 3000    # port exposed by Pod
+  loadBalancerIP: 172.29.0.1
