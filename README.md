@@ -1,28 +1,5 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
 
 ## Local Development
 You may want to install Ruby/Rails/Bundler and run the app locally
@@ -36,8 +13,7 @@ docker-compose build
 docker-compose up
 ```
 
-Update hosts file
-
+## Minikube for Develop
 Install docker/kubectl/minikube/kubectx/kubens
 1. Start minikube which create a kubernetes environment locally
 `minikube start`
@@ -48,26 +24,10 @@ Install docker/kubectl/minikube/kubectx/kubens
 4. Deploy kube files
 -- deploy script
 
-https://medium.com/swlh/how-to-run-locally-built-docker-images-in-kubernetes-b28fbc32cc1d
-
-
-deploy and scripts
-https://skcript.com/svr/dockerize-a-rails-app-with-mysql-and-sidekiq/
-
-set up with k8
-https://medium.com/nycdev/deploy-to-a-managed-kubernetes-cluster-on-google-cloud-894d35b83619
-
 TODO
-
-  1. configure GCP for autopilot 
-  2. figure out if we can have two seperate host urls
-  3. when deploying dev don't forget to add:   
+  1. when deploying prod don't forget to add:   
       `config.hosts << "url-of-brackets-of-love.k8s.com" `
-  4. when pushing docker image to gcp, make a naming convention
-      1. `docker tag develop-brackets-of-love:latest us.gcr.io/$project-id/develop:0.1.0`
-      2. `docker push us.gcr.io/$project-id/develop:0.1.0`
-      3. probably need to use latest to pull image and github commit for history
-  5. google cloud budget
+  2. google cloud budget
 
 
 ## Help
@@ -80,11 +40,12 @@ Installing mysql2 gem on windows https://github.com/brianmario/mysql2/issues/121
 Docker Compose guide - https://salzam.com/create-and-dockerize-rails-application-with-mysql-and-sidekiq/
 - commands you may need can be run like `docker-compose run web rails db:migrate`
 
+### Articles
+https://medium.com/swlh/how-to-run-locally-built-docker-images-in-kubernetes-b28fbc32cc1d
 
-## Todo: 
-When using docker look into /usr/local/bin/ruby: warning: shebang line ending with \r may cause problems
-https://stackoverflow.com/questions/38905135/why-wont-my-docker-entrypoint-sh-execute
+deploy and scripts
+https://skcript.com/svr/dockerize-a-rails-app-with-mysql-and-sidekiq/
 
-https://stackoverflow.com/questions/10418975/how-to-change-line-ending-settings
+set up with k8
+https://medium.com/nycdev/deploy-to-a-managed-kubernetes-cluster-on-google-cloud-894d35b83619
 
-https://github.com/IIC2143-2021-1/Syllabus/issues/96
