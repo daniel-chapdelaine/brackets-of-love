@@ -1,6 +1,4 @@
 #! /bin/sh
-# unset BUNDLE_PATH
-# unset BUNDLE_BIN
 
 # Wait for DB services
 # sh ./config/docker/wait-for-services.sh
@@ -10,6 +8,7 @@
 
 # Pre-comple app assets
 # sh ./config/docker/asset-pre-compile.sh
+bundle exec rails assets:precompile
 
 # Start Application
 bundle exec rails s

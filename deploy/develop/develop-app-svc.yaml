@@ -13,4 +13,3 @@ spec:
     - protocol: TCP
       port: 3000          # port exposed outside ClusterIP
       targetPort: 3000    # port exposed by Pod
-  loadBalancerIP: 172.29.0.1
