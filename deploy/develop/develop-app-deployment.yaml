@@ -41,7 +41,7 @@ spec:
             - containerPort: 3000   # which port of the container is exposed to the Pod
           env:
           - name: DB_HOST
-            value: mysql
+            value: develop-mysql
           - name: DB_USER
             value: root
           - name: DB_PASSWORD
