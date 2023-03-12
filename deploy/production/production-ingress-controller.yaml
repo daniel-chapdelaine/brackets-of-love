@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+# TODO: Probably more to do here setting up when deployed
+kind: Ingress
+metadata:
+  name: production-ingress-service
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: brackets-of-love.k8s.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:  
+              service:
+                name: production-app
+                port:
+                  number: 8080
