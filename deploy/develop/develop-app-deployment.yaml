@@ -24,7 +24,7 @@ spec:
         
       containers:     # defines a running container inside the Pod
         - name: develop-app
-          image:  us.gcr.io/brackets-of-love-379100/develop:latest
+          image:  us.gcr.io/${GCP_PROJECT}/develop:latest
           imagePullPolicy: Always
 
           # readinessProbe:
@@ -43,11 +43,11 @@ spec:
           - name: DB_HOST
             value: develop-mysql
           - name: DB_USER
-            value: root
+            value: ${MYSQL_USERNAME} 
           - name: DB_PASSWORD
-            value: kanban
+            value: ${MYSQL_PASSWORD} 
           - name: DB_NAME
-            value: develop_brackets_of_love
+            value: ${MYSQL_DATABASE} 
           - name: RAILS_ENV
             value: develop
           resources:
