@@ -31,13 +31,14 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
 
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name: 'brackets-of-love-cluster'
+          location: 'us-central1'
 
       - name: Deploy
         run: |
-          gcloud config set compute/region us-central1
-          gcloud container clusters get-credentials brackets-of-love-cluster
           envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f -
           envsubst < ./deploy/develop/develop-mysql-config.yaml | kubectl apply -f -
           kubectl rollout restart deployment.apps/develop-app
