@@ -41,8 +41,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: gcr.io
-          username: _json_key
-          password: ${{ secrets.GCP_CREDENTIALS }}
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
 
 # TODO: ADD COMMITS TO TAGS
       - name: Deploy
