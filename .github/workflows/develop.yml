@@ -37,11 +37,11 @@ jobs:
       - name: Deploy
         run: |
           gcloud config set compute/region us-central1
-        #   gcloud config set compute/zone us-central1-c
-        #   gcloud container clusters get-credentials ${{ secrets.GCP_PROJECT }}
-        # # envsubst < deploy.yml
-        #   envsubst < /deploy/develop/develop-app-deployment.yaml | kubectl apply -f -
-        #   envsubst < /deploy/develop/develop-mysql-config.yaml | kubectl apply -f -
-        #   # for f in /deploy/develop/*.yaml; do envsubst < $f | kubectl apply -f -; done
-        #   kubectl rollout restart deployment.apps/develop-app
-        #   kubectl get all
+          gcloud config set compute/zone us-central1-c
+          gcloud container clusters get-credentials ${{ secrets.GCP_PROJECT }}
+        # envsubst < deploy.yml
+          envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f -
+          envsubst < ./deploy/develop/develop-mysql-config.yaml | kubectl apply -f -
+          # for f in /deploy/develop/*.yaml; do envsubst < $f | kubectl apply -f -; done
+          kubectl rollout restart deployment.apps/develop-app
+          kubectl get all
