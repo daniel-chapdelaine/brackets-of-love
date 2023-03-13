@@ -37,7 +37,6 @@ jobs:
       - name: Deploy
         run: |
           gcloud config set compute/region us-central1
-          gcloud config set compute/zone us-central1-c
           gcloud container clusters get-credentials brackets-of-love-cluster
           envsubst < /deploy/develop/develop-app-deployment.yaml | kubectl apply -f -
           envsubst < /deploy/develop/develop-mysql-config.yaml | kubectl apply -f -
