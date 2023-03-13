@@ -41,5 +41,4 @@ jobs:
         run: |
           envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f -
           envsubst < ./deploy/develop/develop-mysql-config.yaml | kubectl apply -f -
-          kubectl rollout restart deployment.apps/develop-app
           kubectl get all
