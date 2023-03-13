@@ -34,8 +34,8 @@ jobs:
       - id: 'get-credentials'
         uses: 'google-github-actions/get-gke-credentials@v1'
         with:
-          cluster_name: 'brackets-of-love-cluster'
-          location: 'us-central1'
+          cluster_name: '${{ secrets.GCP_CLUSTER }}'
+          location: '${{ secrets.GCP_LOCATION }}'
 
       - name: Deploy
         run: |
