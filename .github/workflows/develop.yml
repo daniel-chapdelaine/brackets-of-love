@@ -88,7 +88,6 @@ jobs:
           # this is the json key of the service account created on the project
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}  
           export_default_credentials: true
-      # Deploy the app using kubernetes (deploy.yml)
       - name: Deploy
         # To run kubectl commands against a cluster created in Cloud Console, 
         # from another computer, or by another member of the project, 
