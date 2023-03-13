@@ -1,72 +1,23 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: develop-db
-#   namespace: develop
-#   labels:
-#     app: develop-app
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: develop-app
-#       tier: mysql
-#   template:
-#     metadata:
-#       labels:
-#         app: develop-app
-#         tier: mysql
-#     spec:
-#       volumes:
-#         - name: develop-pv-volume
-#           persistentVolumeClaim:
-#             claimName: develop-persistent-volume-claim
-#           configMap:
-#             name: develop-mysql-config ## name of ConfigMap
-#       containers:
-#         - name: mysql
-#           image: mysql:8.0
-#           imagePullPolicy: IfNotPresent
-#           ports:
-#             - containerPort: 3306
-#               name: mysql
-#           envFrom:
-#             - configMapRef:
-#                 name: develop-mysql-config
-#           volumeMounts:                 # indicates which Volume (from spec.template.spec.volumes) should be used
-#             - name: develop-pv-volume ## specify volume name
-#               mountPath: /etc/mysql/conf.d/default_auth.cnf ## path to mount file
-#               subPath: default_auth ## name of config
-          # resources:
-          #   limits:
-          #     cpu: "1"
-          #     memory: 512Mi
-          #   requests:
-          #     cpu: 500m
-          #     memory: 256Mi
-
-
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: develop-mysql
   namespace: develop
   labels:
-    app: mysql
+    app: develop-mysql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: develop-mysql
   template:
     metadata:
       labels:
-        app: mysql
+        app: develop-mysql
     spec:
       containers:
         - image: mysql:8
-          name: mysql
+          name: develop-mysql
           args:
             - "--default-authentication-plugin=caching_sha2_password"
           envFrom:
@@ -74,7 +25,7 @@ spec:
                 name: develop-mysql-config
           ports:
             - containerPort: 3306
-              name: mysql
+              name: develop-mysql
           volumeMounts:
             - name: mysql-persistent-storage
               mountPath: /var/lib/mysql

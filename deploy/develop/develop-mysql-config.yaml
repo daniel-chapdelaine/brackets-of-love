@@ -1,18 +1,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  ## name of ConfigMap. This will be referred from volume definition
   name: develop-mysql-config
   namespace: develop
   labels:
     app: develop-app
 data:
-  ## default_auth is the name of config. This will be referred from volume mount definition
-  # TODO: fix passwords
-  MYSQL_ROOT_PASSWORD: kanban
-  MYSQL_USERNAME: root
-  MYSQL_PASSWORD: kanban
-  MYSQL_DATABASE: develop_brackets_of_love
+  MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+  MYSQL_USERNAME: ${MYSQL_USERNAME} 
+  MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
+  MYSQL_DATABASE: ${MYSQL_DATABASE} 
   default_auth: |
     [mysqld]
     default_authentication_plugin=caching_sha2_password
