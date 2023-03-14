@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: develop-mysql-config
+  namespace: develop
+  labels:
+    app: develop-app
+data:
+  MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+  MYSQL_USERNAME: ${MYSQL_USERNAME} 
+  MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
+  MYSQL_DATABASE: ${MYSQL_DATABASE} 
+  default_auth: |
+    [mysqld]
+    default_authentication_plugin=caching_sha2_password
+
+    

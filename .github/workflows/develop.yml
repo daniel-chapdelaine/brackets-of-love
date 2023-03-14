@@ -1,0 +1,77 @@
+name: CI/CD
+
+on:
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
+
+env:
+  GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+  MYSQL_ROOT_PASSWORD: ${{ secrets.DEV_MYSQL_ROOT_PASSWORD }}
+  MYSQL_USERNAME: ${{ secrets.DEV_MYSQL_USERNAME }}
+  MYSQL_PASSWORD: ${{ secrets.DEV_MYSQL_PASSWORD }}
+  MYSQL_DATABASE: ${{ secrets.DEV_MYSQL_DATABASE }}
+  GITHUB_SHA: ${{ github.sha }} 
+  IMAGE: "${{ secrets.GCP_PROJECT }}/develop"
+  REGISTRY_HOSTNAME: us.gcr.io
+
+jobs:
+  deploy_develop:
+    name: Deploy Develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name: '${{ secrets.GCP_CLUSTER }}'
+          location: '${{ secrets.GCP_LOCATION }}'
+
+      - name: Login to GCR
+        uses: docker/login-action@v2
+        with:
+          registry: gcr.io
+          username: _json_key
+          password: ${{ secrets.GCR_CREDENTIALS }}
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - run: |
+          gcloud auth configure-docker
+
+      # Build the Docker image
+      - name: Build
+        run: |
+          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
+          echo $TAG
+          docker build -t "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" \
+            --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} . 
+
+      # Push the Docker image to Google Container Registry
+      - name: Publish
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
+          echo $TAG
+          docker push "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG"
+          docker tag "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+          docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+
+      - name: Deploy
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f - --namespace=develop
+          envsubst < ./deploy/develop/develop-mysql-config.yaml | kubectl apply -f - --namespace=develop
+          kubectl rollout restart deployment.apps/develop-app --namespace=develop
+          kubectl get all --namespace=develop

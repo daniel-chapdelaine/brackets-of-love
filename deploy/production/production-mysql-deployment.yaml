@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: production-mysql
+  namespace: production
+  labels:
+    app: production-mysql
+    group: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: production-mysql
+  template:
+    metadata:
+      labels:
+        app: production-mysql
+        type: db
+    spec:
+      volumes:
+        - name: production-mysql-config-volume ## volume name
+          configMap:
+            name: production-mysql-config ## name of ConfigMap
+      containers:
+        - name: production-mysql
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306 
+          envFrom:
+            - configMapRef:
+                name: production-mysql-config
+          volumeMounts:                 # indicates which Volume (from spec.template.spec.volumes) should be used
+            - name: production-mysql-config-volume ## specify volume name
+              mountPath: /etc/mysql/conf.d/default_auth.cnf ## path to mount file
+              subPath: default_auth ## name of config
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 256Mi
