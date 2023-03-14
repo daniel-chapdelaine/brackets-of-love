@@ -15,9 +15,8 @@ env:
   MYSQL_PASSWORD: ${{ secrets.DEV_MYSQL_PASSWORD }}
   MYSQL_DATABASE: ${{ secrets.DEV_MYSQL_DATABASE }}
   GITHUB_SHA: ${{ github.sha }} 
-  GITHUB_REF: ${{ github.ref }} 
   IMAGE: "${{ secrets.GCP_PROJECT }}/develop"
-  REGISTRY_HOSTNAME: gcr.io
+  REGISTRY_HOSTNAME: us.gcr.io
 
 jobs:
   deploy_develop:
@@ -54,25 +53,20 @@ jobs:
       # Build the Docker image
       - name: Build
         run: |
-          export TAG=`echo $GITHUB_REF | awk -F/ '{print $NF}'`
+          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           echo $TAG
           docker build -t "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" \
-            --build-arg GITHUB_SHA="$GITHUB_SHA" \
-            --build-arg GITHUB_REF="$GITHUB_REF" .
+            --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} . 
 
       # Push the Docker image to Google Container Registry
       - name: Publish
         run: |
-          export TAG=`echo $GITHUB_REF | awk -F/ '{print $NF}'`
+          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           echo $TAG
           docker push "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG"
           docker tag "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
           docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
 
-# TODO: ADD COMMITS TO TAGS
-          # docker build --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} -t develop/brackets-of-love:latest .
-          # docker tag develop/brackets-of-love:latest us.gcr.io/${{ secrets.GCP_PROJECT }}/develop:latest
-          # docker push us.gcr.io/${{ secrets.GCP_PROJECT }}/develop:latest
       - name: Deploy
         run: |
           envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f - --namespace=develop
