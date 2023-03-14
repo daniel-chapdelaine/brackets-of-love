@@ -60,6 +60,7 @@ jobs:
 
       # Push the Docker image to Google Container Registry
       - name: Publish
+        if: ${{ github.event_name == 'push' }}
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           echo $TAG
@@ -68,6 +69,7 @@ jobs:
           docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
 
       - name: Deploy
+        if: ${{ github.event_name == 'push' }}
         run: |
           envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f - --namespace=develop
           envsubst < ./deploy/develop/develop-mysql-config.yaml | kubectl apply -f - --namespace=develop
