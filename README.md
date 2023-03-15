@@ -1,19 +1,33 @@
-# README
+# Welcome to the Brackets of Love Repo! 
 
 
 ## Local Development
+Install docker/mysql
 You may want to install Ruby/Rails/Bundler and run the app locally
 OR
 Install Docker and do the following:
 ```
-cd development/
+// if it's your first time or need to run a bundle or rails command
 docker-compose run app bundle install
-docker-compose run app rails db:setup
+docker-compose run app rails db:setup 
+// else you can just do this
 docker-compose build
 docker-compose up
 ```
 
-## Minikube for Develop
+## Deployment Methodology
+1. Make a PR against main using your branch
+2. Ensure unit tests pass and build succeeds
+3. Get one approval from another dev to move code to develop
+4. Push to develop
+    1. Checkout to local develop and `git pull origin develop`
+    2. `git merge your-branch-name`
+    3. `git push origin develop`
+5. Ensure it [builds](https://github.com/daniel-chapdelaine/brackets-of-love/actions) correctly and then QA new functionality
+6. Once satisfied, get [this guy's](https://github.com/daniel-chapdelaine) label on your PR and you are good to merge to main
+
+
+## Minikube for Develop/Prod
 Install docker/kubectl/minikube/kubectx/kubens
 1. Start minikube which create a kubernetes environment locally
 `minikube start`
@@ -22,12 +36,15 @@ Install docker/kubectl/minikube/kubectx/kubens
 3. Start tunnel for port forwarding
 `minikube tunnel`
 4. Deploy kube files
--- deploy script
 
-TODO
-  1. when deploying prod don't forget to add:   
+## TODO
+  - when deploying prod don't forget to add:   
       `config.hosts << "url-of-brackets-of-love.k8s.com" `
-  2. google cloud budget
+  - google cloud budget
+  - set up tests in githubactions
+  - set up seeder
+
+
 
 
 ## Help
