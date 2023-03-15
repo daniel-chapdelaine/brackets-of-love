@@ -95,12 +95,24 @@ jobs:
           docker build -t "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" \
             --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
 
+      - name: Upload image
+        if: ${{ github.event_name == 'push' }}
+        uses: ishworkh/docker-image-artifact-upload@v1
+        with:
+          image: "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG"
+          retention_days: "2"
+            
+      
   deploy:
     name: Deploy
     needs: [test, build]
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Download image
+        uses: ishworkh/docker-image-artifact-download@v1
+        with:
+          image: "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG"
       # Push the Docker image to Google Container Registry
       - name: Publish
         run: |
