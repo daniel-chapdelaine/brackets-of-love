@@ -49,6 +49,8 @@ jobs:
         bundle install --jobs 4 --retry 3
     - name: Run Tests
       run: |
+        sudo systemctl enable mysql.service
+        sudo systemctl start mysql.service
         sudo service mysql start
         bundle exec rails db:prepare
         bundle exec rspec
