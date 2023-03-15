@@ -27,9 +27,7 @@ jobs:
         image: mysql:8.0.21
         env:
           MYSQL_DATABASE: test-brackets-of-love
-          MYSQL_ROOT_PASSWORD: kanban
-          MYSQL_USERNAME: root
-          MYSQL_PASSWORD: kanban
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -37,7 +35,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Verify test-brackets-of-love DB exists
-      run: mysql --host 127.0.0.1 --port 3306 -uroot -pkanban -e "SHOW DATABASES LIKE 'test-brackets-of-love'"
+      run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'test-brackets-of-love'"
     - uses: actions/checkout@v2
     - name: Set up Ruby 3.1.3
       uses: actions/setup-ruby@v1
@@ -53,10 +51,9 @@ jobs:
         bundle exec rspec
       env:
         RAILS_ENV: test
-        # DB_CONNECTION: mysql
         DB_PORT: 3306
         DB_USER: root
-        DB_PASSWORD: kanban
+        DB_PASSWORD: ""
         DB_DATABASE: test-brackets-of-love
 
   deploy_develop:
