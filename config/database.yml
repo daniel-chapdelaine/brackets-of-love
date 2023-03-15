@@ -17,8 +17,6 @@ test:
   database: test-brackets-of-love
   <% if ENV['CI'] %>
   host: 127.0.0.1
-  username: root
-  password:
   <% end %>
 
 develop:
