@@ -10,20 +10,24 @@ Install Docker and MySql and run the app using [docker-compose](https://docs.doc
 
 * Note: Any normal command needs docker-compose if using this method
 ```
-// if it's your first time
-docker-compose run app bundle install
-docker-compose run app bundle exec rails db:create db:schema:load 
-// else you can just do this
 docker-compose build
 docker-compose up
+// if it's your first time use the following from a command line
+docker-compose run app bundle install
+docker-compose run app bundle exec rails db:create:all db:schema:load
+// or these from the apps Docker terminal
+bundle install
+bundle exec rails db:create:all db:schema:load
+// 
+
 ```
 
 ## Local Unit Testing
+```
 // if it's your first time
 RAILS_ENV=test docker-compose run app bundle exec rails db:create db:schema:load 
-// else you can just do this
-docker-compose build
-docker-compose up
+//
+bundle exec rspec
 ```
 
 
