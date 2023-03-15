@@ -99,7 +99,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
-          image: "$REGISTRY_HOSTNAME/$IMAGE:$TAG"
+          image: `$REGISTRY_HOSTNAME/$IMAGE:$TAG`
           retention_days: "2"
             
       
@@ -112,7 +112,7 @@ jobs:
       - name: Download image
         uses: ishworkh/docker-image-artifact-download@v1
         with:
-          image: "$REGISTRY_HOSTNAME/$IMAGE:$TAG"
+          image: `$REGISTRY_HOSTNAME/$IMAGE:$TAG`
       # Push the Docker image to Google Container Registry
       - name: Publish
         run: |
