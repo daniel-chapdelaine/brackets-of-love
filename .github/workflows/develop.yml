@@ -92,14 +92,16 @@ jobs:
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           echo $TAG
-          docker build -t "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" \
+          export TAG_URL=`echo $GITHUB_SHA/$IMAGE:$TAG'`
+          echo $TAG_URL
+          docker build -t "$TAG_URL" \
             --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
 
       - name: Upload image
         if: ${{ github.event_name == 'push' }}
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
-          image: "${{ REGISTRY_HOSTNAME }}/${{ IMAGE }}:${{ TAG }}"
+          image: $TAG_URL
           retention_days: "2"
             
       
@@ -112,14 +114,12 @@ jobs:
       - name: Download image
         uses: ishworkh/docker-image-artifact-download@v1
         with:
-          image: "${{ REGISTRY_HOSTNAME }}/${{ IMAGE }}:${{ TAG }}"
+          image: $TAG_URL
       # Push the Docker image to Google Container Registry
       - name: Publish
         run: |
-          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          echo $TAG
-          docker push "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG"
-          docker tag "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+          docker push "$TAG_URL"
+          docker tag "$TAG_URL" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
           docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
 
       - name: Deploy
