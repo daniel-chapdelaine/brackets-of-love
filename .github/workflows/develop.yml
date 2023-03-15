@@ -92,7 +92,7 @@ jobs:
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           echo $TAG
-          export TAG_URL=`echo $GITHUB_SHA/$IMAGE:$TAG'`
+          export TAG_URL=`echo $GITHUB_SHA/$IMAGE:$TAG`
           echo $TAG_URL
           docker build -t "$TAG_URL" \
             --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
