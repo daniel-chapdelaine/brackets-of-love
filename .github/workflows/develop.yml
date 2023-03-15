@@ -35,12 +35,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Verify test-brackets-of-love DB exists
-      run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'test-brackets-of-love'"
+      run: mysql --host 127.0.0.1 --port 3306 -uroot -pkanban -e "SHOW DATABASES LIKE 'test-brackets-of-love'"
       env:
         DB_CONNECTION: mysql
         DB_PORT: 3306
         DB_USER: root
-        DB_PASSWORD: ""
+        DB_PASSWORD: kanban
         DB_DATABASE: test-brackets-of-love
     - uses: actions/checkout@v2
     - name: Set up Ruby 3.1.3
