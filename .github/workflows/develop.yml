@@ -1,4 +1,4 @@
-name: CI/CD
+name: Develop
 
 on:
   pull_request:
@@ -20,7 +20,7 @@ env:
 
 jobs:
   test:
-    name: Test Develop
+    name: Test
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -57,7 +57,7 @@ jobs:
         DB_DATABASE: test-brackets-of-love
 
   deploy_develop:
-    name: Deploy Develop
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
