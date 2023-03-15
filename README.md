@@ -2,18 +2,30 @@
 
 
 ## Local Development
-Install docker/mysql
-You may want to install Ruby/Rails/Bundler and run the app locally
+You have two options, install everything on your local machine
+
 OR
-Install Docker and do the following:
+
+Install Docker and MySql and run the app using [docker-compose](https://docs.docker.com/compose/)
+
+* Note: Any normal command needs docker-compose if using this method
 ```
-// if it's your first time or need to run a bundle or rails command
+// if it's your first time
 docker-compose run app bundle install
-docker-compose run app rails db:setup 
+docker-compose run app bundle exec rails db:create db:schema:load 
 // else you can just do this
 docker-compose build
 docker-compose up
 ```
+
+## Local Unit Testing
+// if it's your first time
+RAILS_ENV=test docker-compose run app bundle exec rails db:create db:schema:load 
+// else you can just do this
+docker-compose build
+docker-compose up
+```
+
 
 ## Deployment Methodology
 1. Make a PR against main using your branch
