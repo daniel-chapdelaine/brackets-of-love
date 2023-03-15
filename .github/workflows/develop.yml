@@ -28,9 +28,6 @@ jobs:
         image: mysql:8
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_ROOT_PASSWORD: kanban
-          MYSQL_USERNAME: root
-          MYSQL_PASSWORD: kanban
           MYSQL_DATABASE: test-brackets-of-love
         ports:
           - 3306
@@ -56,9 +53,6 @@ jobs:
         bundle exec rspec
       env:
         RAILS_ENV: test
-        DB_USER: root
-        DB_PASSWORD: kanban
-        DB_NAME: test-brackets-of-love
 
   deploy_develop:
     name: Deploy Develop
