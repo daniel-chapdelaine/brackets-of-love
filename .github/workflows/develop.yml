@@ -97,9 +97,8 @@ jobs:
 
   deploy:
     name: Deploy
-    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
-      # Push the Docker image to Google Container Registry
+    steps:
       - name: Publish
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
