@@ -1,5 +1,4 @@
-# README
- Welcome to the Brackets of Love Repo! 
+# Welcome to the Brackets of Love Repo! 
 
 
 ## Local Development
