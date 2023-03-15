@@ -19,8 +19,11 @@ docker-compose up
 1. Make a PR against main using your branch
 2. Ensure unit tests pass and build succeeds
 3. Get one approval from another dev to move code to develop
-4. Push to develop ensuring it builds correctly
-5. QA new functionality
+4. Push to develop
+    1. Checkout to local develop and `git pull origin develop`
+    2. `git merge your-branch-name`
+    3. `git push origin develop`
+5. Ensure it [builds](https://github.com/daniel-chapdelaine/brackets-of-love/actions) correctly and then QA new functionality
 6. Once satisfied, get [this guy's](https://github.com/daniel-chapdelaine) label on your PR and you are good to merge to main
 
 
