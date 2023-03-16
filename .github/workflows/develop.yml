@@ -100,7 +100,7 @@ jobs:
           context: .
           push: false
           file: ./Dockerfile
-          tags: ${{$REGISTRY_HOSTNAME}}/${{$IMAGE}}:${{$GITHUB_SHA}}
+          tags: ${{ REGISTRY_HOSTNAME }}/${{ IMAGE }}:${{ GITHUB_SHA }}
           build-args: |
             RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
           outputs: type=docker,dest=/tmp/image.tar
