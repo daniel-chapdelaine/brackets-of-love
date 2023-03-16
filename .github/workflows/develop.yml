@@ -107,7 +107,7 @@ jobs:
       
 #if statement v
       - name: Upload artifact
-        uses: actions/upload-artifact@3
+        uses: actions/upload-artifact@2
         with:
           name: myimage
           path: /tmp/image.tar
@@ -119,7 +119,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: myimage
           path: /tmp
