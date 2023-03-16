@@ -17,7 +17,6 @@ env:
   GITHUB_SHA: ${{ github.sha }} 
   IMAGE: "${{ secrets.GCP_PROJECT }}/develop"
   REGISTRY_HOSTNAME: us.gcr.io
-  TAG_URL: ""
 
 jobs:
   test:
@@ -34,10 +33,10 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Verify test-brackets-of-love DB exists
       run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'test-brackets-of-love'"
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Ruby 3.1.3
       uses: actions/setup-ruby@v1
       with:
@@ -57,12 +56,12 @@ jobs:
         DB_PASSWORD: ""
         DB_DATABASE: test-brackets-of-love
 
-  build:
-    name: Build
+  build_deploy:
+    name: Build/Deploy
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -84,55 +83,27 @@ jobs:
           registry: gcr.io
           username: _json_key
           password: ${{ secrets.GCR_CREDENTIALS }}
-      # Configure docker to use the gcloud command-line tool as a credential helper
-      - run: |
-          gcloud auth configure-docker
 
-      # Build the Docker image
-      - name: Create Tag
+      - run: gcloud auth configure-docker
+
+      - name: Build
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: false
-          file: ./Dockerfile
-          tags: $TAG_URL
-          build-args: |
-            RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
-          outputs: type=docker,dest=/tmp/image.tar
-      
-#if statement v
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: myimage
-          path: /tmp/image.tar
-      
-  deploy:
-    name: Deploy
-    needs: [test, build]
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: myimage
-          path: /tmp
+          echo $TAG
+          docker build -t "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" \
+            --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} . 
 
       - name: Publish
+        if: ${{ github.event_name == 'push' }}
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-          docker push "$TAG_URL"
-          docker tag "$TAG_URL" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+          echo $TAG
+          docker push "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG"
+          docker tag "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
           docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
-
+          
       - name: Deploy
+        if: ${{ github.event_name == 'push' }}
         run: |
           envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f - --namespace=develop
           envsubst < ./deploy/develop/develop-mysql-config.yaml | kubectl apply -f - --namespace=develop
