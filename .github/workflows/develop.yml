@@ -89,13 +89,21 @@ jobs:
           gcloud auth configure-docker
 
       # Build the Docker image
-      - name: Build
+      - name: Create Tag
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-          docker build -t "$TAG_URL" \
-            --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
-        outputs: type=docker,dest=/tmp/image.tar
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          true
+          file: ./Dockerfile
+          tags: $TAG_URL
+          build-args: |
+            RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
+          outputs: type=docker,dest=/tmp/image.tar
       
 #if statement v
       - name: Upload artifact
