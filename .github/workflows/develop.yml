@@ -131,7 +131,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{needs.build.steps.tag.outputs.TAG_URL}}, ${{needs.build.steps.tag.outputs.TAG_URL_LATEST}}
+          tags: ${{needs.build.outputs.TAG_URL}}, ${{needs.build.outputs.TAG_URL_LATEST}}
           cache-from: type=local,dest=/tmp/
 
       # - name: Publish
