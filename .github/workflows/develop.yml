@@ -88,11 +88,11 @@ jobs:
       - run: |
           gcloud auth configure-docker
 
-      # Build the Docker image
-      - name: Create Tag
-        run: |
-          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
+      # # Build the Docker image
+      # - name: Create Tag
+      #   run: |
+      #     export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
+      #     export TAG_URL=`echo `
 
       - name: Build and push
         uses: docker/build-push-action@v2
@@ -100,11 +100,11 @@ jobs:
           context: .
           push: false
           file: ./Dockerfile
-          tags:  "$TAG_URL"
+          tags: ${{REGISTRY_HOSTNAME}}/${{IMAGE}}:${{GITHUB_SHA}}
           build-args: |
             RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
           outputs: type=docker,dest=/tmp/image.tar
-      
+          
 #if statement v
       - name: Upload artifact
         uses: actions/upload-artifact@v3
