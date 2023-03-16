@@ -95,6 +95,14 @@ jobs:
           export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
           docker build -t "$TAG_URL" \
             --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
+        outputs: type=docker,dest=/tmp/image.tar
+      
+#if statement v
+      - name: Upload artifact
+        uses: actions/upload-artifact@3
+        with:
+          name: myimage
+          path: /tmp/image.tar
       
   deploy:
     name: Deploy
@@ -102,6 +110,13 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
+
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: myimage
+        path: /tmp
+
       - name: Publish
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
