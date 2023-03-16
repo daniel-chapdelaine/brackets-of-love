@@ -56,8 +56,8 @@ jobs:
         DB_PASSWORD: ""
         DB_DATABASE: test-brackets-of-love
 
-  build_deploy:
-    name: Build/Deploy
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
@@ -101,9 +101,14 @@ jobs:
           docker push "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG"
           docker tag "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
           docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
-          
+
+  deploy:
+    name: Deploy
+    need: ['test', 'build']
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy
-        if: ${{ github.event_name == 'push' }}
         run: |
           envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f - --namespace=develop
           envsubst < ./deploy/develop/develop-mysql-config.yaml | kubectl apply -f - --namespace=develop
