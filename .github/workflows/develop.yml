@@ -92,6 +92,7 @@ jobs:
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
+          echo "TAG_URL=$TAG_URL" >> $GITHUB_ENV
           echo "The TAGURL is: $TAG_URL"
           docker build -t "$TAG_URL" \
             --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
