@@ -119,12 +119,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo url
-        run: echo "The TAGURL is: $TAG_URL"
-      # - uses: actions/download-artifact@v3
-      #   with:
-      #     name: image
-
-      # Push the Docker image to Google Container Registry
+        run: echo "The TAGURL is $TAG_URL"
       - name: Publish
         run: |
           docker push "$TAG_URL"
