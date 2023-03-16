@@ -104,7 +104,7 @@ jobs:
           tags: ${{steps.tag.outputs.TAG_URL}}
           build-args: |
             RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
-          outputs: type=docker,dest=/tmp/image.tar
+          outputs: type=local,dest=/tmp/image.tar
           
 #if statement v
       - name: Upload artifact
