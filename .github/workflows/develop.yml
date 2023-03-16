@@ -104,7 +104,7 @@ jobs:
 
   deploy:
     name: Deploy
-    need: ['test', 'build']
+    needs: ['test', 'build']
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
