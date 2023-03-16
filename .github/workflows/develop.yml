@@ -117,14 +117,14 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      # - name: 'Set up Cloud SDK'
-      #   uses: 'google-github-actions/setup-gcloud@v1'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
 
-      # - id: 'get-credentials'
-      #   uses: 'google-github-actions/get-gke-credentials@v1'
-      #   with:
-      #     cluster_name: '${{ secrets.GCP_CLUSTER }}'
-      #     location: '${{ secrets.GCP_LOCATION }}'
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name: '${{ secrets.GCP_CLUSTER }}'
+          location: '${{ secrets.GCP_LOCATION }}'
 
       - name: Deploy
         run: |
