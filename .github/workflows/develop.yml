@@ -125,19 +125,20 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: myimage
-          path: /tmp
-
       - name: Publish
-        run: |
-          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-          docker push "$TAG_URL"
-          docker tag "$TAG_URL" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
-          docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{needs.build.steps.tag.outputs.TAG_URL}}, "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+          cache-from: type=local,dest=/tmp/
+
+      # - name: Publish
+      #   run: |
+      #     export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
+      #     export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
+      #     docker push "$TAG_URL"
+      #     docker tag "$TAG_URL" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+      #     docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
 
       - name: Deploy
         run: |
