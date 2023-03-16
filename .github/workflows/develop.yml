@@ -91,11 +91,12 @@ jobs:
       - name: Build
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          echo "TAG_URL=$(echo $REGISTRY_HOSTNAME/$IMAGE:$TAG)" >> $GITHUB_ENV
+          export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
           echo "The TAGURL is: $TAG_URL"
           docker build -t "$TAG_URL" \
             --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
 
+    # echo "TAG_URL=$(echo $REGISTRY_HOSTNAME/$IMAGE:$TAG)" >> $GITHUB_ENV
     # export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
       # - name: Upload Image
       #   steps:
