@@ -17,6 +17,7 @@ env:
   GITHUB_SHA: ${{ github.sha }} 
   IMAGE: "${{ secrets.GCP_PROJECT }}/develop"
   REGISTRY_HOSTNAME: us.gcr.io
+  TAG_URL: ""
 
 jobs:
   test:
@@ -92,28 +93,8 @@ jobs:
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-          echo "TAG_URL=$(echo $REGISTRY_HOSTNAME/$IMAGE:$TAG)" >> $GITHUB_ENV
-          echo "The TAGURL is: $TAG_URL"
-          echo "The GITHUB_ENV is $GITHUB_ENV"
           docker build -t "$TAG_URL" \
             --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
-
-    # echo "TAG_URL=$(echo $REGISTRY_HOSTNAME/$IMAGE:$TAG)" >> $GITHUB_ENV
-    # export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-      # - name: Upload Image
-      #   steps:
-      #   - uses: actions/checkout@v3
-
-      #   - run: mkdir -p path/to/artifact
-
-      #   - run:  docker cp path/to/artifact/image.txt CONTAINER:/work
-
-      #   - uses: actions/upload-artifact@v3
-      #     with:
-      #       name: my-artifact
-      #       path: path/to/artifact/image.txt
-
-    # trying pushing and pulling from docker! 
       
   deploy:
     name: Deploy
@@ -121,10 +102,10 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Echo url
-        run: echo "The TAGURL is $TAG_URL"
       - name: Publish
         run: |
+          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
+          export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
           docker push "$TAG_URL"
           docker tag "$TAG_URL" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
           docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
