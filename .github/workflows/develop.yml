@@ -100,7 +100,7 @@ jobs:
           context: .
           push: false
           file: ./Dockerfile
-          tags: $TAG_URL
+          tags: ${{ TAG_URL }}
           build-args: |
             RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
           outputs: type=docker,dest=/tmp/image.tar
