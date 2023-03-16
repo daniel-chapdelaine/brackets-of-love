@@ -34,10 +34,10 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Verify test-brackets-of-love DB exists
       run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'test-brackets-of-love'"
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Ruby 3.1.3
       uses: actions/setup-ruby@v1
       with:
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -114,10 +114,10 @@ jobs:
             RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
           cache-to: type=local,dest=/tmp/
           
-    outputs:
-      if: ${{ github.event_name == 'push' }}
-      TAG_URL_LATEST: ${{steps.tag.outputs.TAG_URL_LATEST}}
-      TAG_URL: ${{steps.tag.outputs.TAG_URL}}
+    # outputs:
+    #   if: ${{ github.event_name == 'push' }}
+    #   TAG_URL_LATEST: ${{steps.tag.outputs.TAG_URL_LATEST}}
+    #   TAG_URL: ${{steps.tag.outputs.TAG_URL}}
       
   deploy:
     name: Deploy
@@ -125,11 +125,21 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
+
+      - name: Create Tag
+        id: tags
+        run: |
+          TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
+          TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
+          echo "TAG_URL=$TAG_URL" >> "$GITHUB_OUTPUT"
+          TAG_URL_LATEST=`echo $REGISTRY_HOSTNAME/$IMAGE:latest`
+          echo "TAG_URL_LATEST=$TAG_URL_LATEST" >> "$GITHUB_OUTPUT"
+
       - name: Publish
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{needs.build.outputs.TAG_URL}}, ${{needs.build.outputs.TAG_URL_LATEST}}
+          tags: ${{steps.tags.outputs.TAG_URL}}, ${{steps.tags.outputs.TAG_URL_LATEST}}
           cache-from: type=local,dest=/tmp/
 
       # - name: Publish
