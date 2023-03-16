@@ -17,7 +17,6 @@ env:
   GITHUB_SHA: ${{ github.sha }} 
   IMAGE: "${{ secrets.GCP_PROJECT }}/develop"
   REGISTRY_HOSTNAME: us.gcr.io
-  TAG_URL: ""
 
 jobs:
   test:
@@ -84,72 +83,31 @@ jobs:
           registry: gcr.io
           username: _json_key
           password: ${{ secrets.GCR_CREDENTIALS }}
-      # Configure docker to use the gcloud command-line tool as a credential helper
-      - run: |
-          gcloud auth configure-docker
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        
-      - name: Create Tag
-        id: tag
-        run: |
-          TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-          echo "TAG_URL=$TAG_URL" >> "$GITHUB_OUTPUT"
-          TAG_URL_LATEST=`echo $REGISTRY_HOSTNAME/$IMAGE:latest`
-          echo "TAG_URL_LATEST=$TAG_URL_LATEST" >> "$GITHUB_OUTPUT"
+      - run: gcloud auth configure-docker
 
       - name: Build
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: false
-          file: ./Dockerfile
-          tags: ${{steps.tag.outputs.TAG_URL}}
-          build-args: |
-            RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
-          cache-to: type=local,dest=/tmp/
-          
-    # outputs:
-    #   if: ${{ github.event_name == 'push' }}
-    #   TAG_URL_LATEST: ${{steps.tag.outputs.TAG_URL_LATEST}}
-    #   TAG_URL: ${{steps.tag.outputs.TAG_URL}}
-      
+        run: |
+          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
+          echo $TAG
+          docker build -t "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" \
+            --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} . 
+
+      - name: Publish
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
+          echo $TAG
+          docker push "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG"
+          docker tag "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+          docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+
   deploy:
     name: Deploy
-    needs: [test, build]
+    need: ['test', 'build']
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
-
-      - name: Create Tag
-        id: tags
-        run: |
-          TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-          echo "TAG_URL=$TAG_URL" >> "$GITHUB_OUTPUT"
-          TAG_URL_LATEST=`echo $REGISTRY_HOSTNAME/$IMAGE:latest`
-          echo "TAG_URL_LATEST=$TAG_URL_LATEST" >> "$GITHUB_OUTPUT"
-
-      - name: Publish
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: ${{steps.tags.outputs.TAG_URL}}, ${{steps.tags.outputs.TAG_URL_LATEST}}
-          cache-from: type=local,dest=/tmp/
-
-      # - name: Publish
-      #   run: |
-      #     export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-      #     export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-      #     docker push "$TAG_URL"
-      #     docker tag "$TAG_URL" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
-      #     docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
-
       - name: Deploy
         run: |
           envsubst < ./deploy/develop/develop-app-deployment.yaml | kubectl apply -f - --namespace=develop
