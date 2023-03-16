@@ -96,7 +96,7 @@ jobs:
           echo "TAG_URL=$TAG_URL" >> "$GITHUB_OUTPUT"
 
       - name: Build
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v2
         with:
           context: .
           push: false
@@ -104,14 +104,14 @@ jobs:
           tags: ${{steps.tag.outputs.TAG_URL}}
           build-args: |
             RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
-          outputs: type=local,dest=/tmp/image.tar
-          
-#if statement v
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: myimage
-          path: /tmp/image.tar
+          cache-to: type=local,dest=/tmp/
+      
+# #if statement v
+#       - name: Upload artifact
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: myimage
+#           path: /tmp/image.tar
       
   deploy:
     name: Deploy
