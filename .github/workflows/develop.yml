@@ -91,23 +91,26 @@ jobs:
       - name: Build
         run: |
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
-          echo $TAG
-          export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
-          export LATEST_TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:latest`
-          echo "TAG_URL=$TAG_URL" >> $GITHUB_ENV
-          echo "LATEST_TAG_URL=$LATEST_TAG_URL" >> $GITHUB_ENV
-          echo "$TAG_URL"
-          echo "$LATEST_TAG_URL"
-          docker build -t "$LATEST_TAG_URL" \
+          echo "TAG_URL=$(echo $REGISTRY_HOSTNAME/$IMAGE:$TAG)" >> $GITHUB_ENV
+          echo "The TAGURL is: $TAG_URL"
+          docker build -t "$TAG_URL" \
             --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} .
 
-      - name: Upload image
-        if: ${{ github.event_name == 'push' }}
-        uses: ishworkh/docker-image-artifact-upload@v1
-        with:
-          image: "$LATEST_TAG_URL"
-          retention_days: "2"
-            
+    # export TAG_URL=`echo $REGISTRY_HOSTNAME/$IMAGE:$TAG`
+      # - name: Upload Image
+      #   steps:
+      #   - uses: actions/checkout@v3
+
+      #   - run: mkdir -p path/to/artifact
+
+      #   - run:  docker cp path/to/artifact/image.txt CONTAINER:/work
+
+      #   - uses: actions/upload-artifact@v3
+      #     with:
+      #       name: my-artifact
+      #       path: path/to/artifact/image.txt
+
+    # trying pushing and pulling from docker! 
       
   deploy:
     name: Deploy
@@ -115,16 +118,18 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Download image
-        uses: ishworkh/docker-image-artifact-download@v1
-        with:
-          image: "$LATEST_TAG_URL"
+      - name: Echo url
+        run: echo "The TAGURL is: $TAG_URL"
+      # - uses: actions/download-artifact@v3
+      #   with:
+      #     name: image
+
       # Push the Docker image to Google Container Registry
       - name: Publish
         run: |
-          docker push "$LATEST_TAG_URL"
-          docker tag "$TAG_URL" "$LATEST_TAG_URL"
           docker push "$TAG_URL"
+          docker tag "$TAG_URL" "$REGISTRY_HOSTNAME"/"$IMAGE":latest
+          docker push "$REGISTRY_HOSTNAME"/"$IMAGE":latest
 
       - name: Deploy
         run: |
