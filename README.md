@@ -25,9 +25,12 @@ bundle exec rails db:create:all db:schema:load
 ## Local Unit Testing
 ```
 // if it's your first time
-RAILS_ENV=test docker-compose run app bundle exec rails db:create db:schema:load 
+RAILS_ENV=test docker-compose run --rm test-app bundle exec rails db:create db:schema:load 
 //
-bundle exec rspec
+RAILS_ENV=test bundle exec rspec
+or 
+RAILS_ENV=test docker-compose run --rm test-app bundle exec rspec
+
 ```
 
 
