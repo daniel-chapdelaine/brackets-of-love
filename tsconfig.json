@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "module": "ESNext",
+      "target": "es6",
+      "noImplicitAny": true,
+      "sourceMap": true,
+      "jsx": "react"
+    }
+  }

@@ -6,10 +6,10 @@ interface AppProps {
 }
 
 const App = ({ arg }: AppProps) => {
-  return <div>{`Hello, ${arg}!`}</div>;
+  return <div>{`OH, hello, ${arg}!`}</div>;
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   const rootEl = document.getElementById("root");
-  ReactDOM.render(<App arg="Rails 7 with ESBuild" />, rootEl);
+  ReactDOM.render(<App arg="React" />, rootEl);
 });

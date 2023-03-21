@@ -4,8 +4,11 @@
   "main": "application.ts",
   "repository": "git@github.com:daniel-chapdelaine/brackets-of-love.git",
   "author": "Daniel Chapdelaine",
+  "type": "module",
   "license": "MIT",
   "dependencies": {
+    "@hotwired/stimulus": "^3.2.1",
+    "@hotwired/turbo-rails": "^7.3.0",
     "esbuild": "^0.17.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -15,6 +18,8 @@
     "@types/react-dom": "^18.0.11"
   },
   "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets"
+    "build": "NODE_ENV=production node esbuild.config.js",
+    "build-develop": "NODE_ENV=develop node esbuild.config.js",
+    "watch": "NODE_ENV=development node esbuild.config.js"
   }
 }
