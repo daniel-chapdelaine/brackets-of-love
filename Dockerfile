@@ -33,6 +33,7 @@ RUN bundle install
 RUN npm install -g yarn
 COPY package.json yarn.lock ./
 RUN yarn install --check-files
+RUN yarn build-develop
 
 COPY . .
 
