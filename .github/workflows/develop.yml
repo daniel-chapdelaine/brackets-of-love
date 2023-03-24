@@ -19,8 +19,8 @@ env:
   REGISTRY_HOSTNAME: us.gcr.io
 
 jobs:
-  test:
-    name: Test
+  test-rails:
+    name: Rails Tests
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -58,6 +58,33 @@ jobs:
         DB_USER: root
         DB_PASSWORD: ""
         DB_DATABASE: test-brackets-of-love
+
+  test-react:
+    name: React Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Run install
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: install # will run `yarn install` command
+      # env:
+      #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # if needed
+    # - name: Build production bundle
+    #   uses: borales/actions-yarn@v4
+    #   with:
+    #     cmd: build # will run `yarn build:prod` command
+    - name: Test the app
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: test # will run `yarn test` command
 
   build:
     name: Build
