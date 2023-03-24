@@ -61,6 +61,16 @@ services:
     links:
       - db
 
+  test-react:
+    build:
+      context: ./
+      dockerfile: local.Dockerfile
+    volumes:
+      - ./:/app
+      - bundle:/bundle
+    ports:
+      - 3002:3002
+
 volumes:
   db:
     driver: local

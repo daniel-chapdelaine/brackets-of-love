@@ -5,7 +5,7 @@ interface AppProps {
   arg: string;
 }
 
-const App = ({ arg }: AppProps) => {
+export const App = ({ arg }: AppProps) => {
   return <div>{`OH, hello, ${arg}!`}</div>;
 };
 

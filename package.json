@@ -14,12 +14,23 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.0.0",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "*",
     "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11"
+    "@types/react-dom": "^18.0.11",
+    "chai": "^4.3.7",
+    "jsdom": "^21.1.1",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
   },
   "scripts": {
     "build": "NODE_ENV=production node esbuild.config.js",
     "build-develop": "NODE_ENV=develop node esbuild.config.js",
-    "watch": "NODE_ENV=development node esbuild.config.js"
+    "watch": "NODE_ENV=development node esbuild.config.js",
+    "test": "env NODE_ENV=testing mocha"
   }
 }
