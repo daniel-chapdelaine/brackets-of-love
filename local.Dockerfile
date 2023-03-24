@@ -1,6 +1,5 @@
 FROM ruby:3.1
-# FROM node:6.11.0 
-# Arguments
+
 ARG RAILS_MASTER_KEY
 
 # Environment Variables
