@@ -8,6 +8,7 @@
 
 # Pre-comple app assets
 # sh ./config/docker/asset-pre-compile.sh
+yarn build-develop
 bundle exec rails assets:precompile
 
 # Start Application

@@ -19,7 +19,6 @@ const buildContext = {
 if (env === 'development') {
   let ctx = await esbuild.context(buildContext).catch(() => process.exit(1))
   await ctx.watch();
-  // await ctx.serve({ servedir: path.join(process.cwd(), "app/assets/builds"),})
 } 
 else {
   esbuild.build(buildContext)
