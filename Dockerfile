@@ -34,10 +34,10 @@ RUN npm install -g yarn
 COPY package.json yarn.lock esbuild.config.js ./
 RUN yarn install --check-files
 
+COPY . .
+
 RUN yarn build-develop
 RUN bundle exec rails assets:precompile
-
-COPY . .
 
 EXPOSE 3000
 
