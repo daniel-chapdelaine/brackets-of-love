@@ -9,7 +9,7 @@ const buildContext = {
   define: {
     "process.env.NODE_ENV": `'${env}'`
   },
-  entryPoints: ["app/javascript/application.ts"],
+  entryPoints: [path.join(process.cwd(), "app/javascript/application.ts")],
   bundle: true,
   minify: true,
   sourcemap: true,
