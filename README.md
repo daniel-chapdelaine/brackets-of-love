@@ -64,9 +64,7 @@ Install docker/kubectl/minikube/kubectx/kubens
 
 
 ## Help
-
-How to get on a mysql pod `kubectl exec -it pod-name /bin/bash`
-How to get on a app pod `kubectl exec -it pod-name /bin/ash`
+How to get on a pod `kubectl exec -it pod-name /bin/bash`
 
 Installing mysql2 gem on windows https://github.com/brianmario/mysql2/issues/1210
 
