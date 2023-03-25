@@ -31,6 +31,6 @@
     "build": "node esbuild.config.js",
     "build-develop": "node esbuild.config.js",
     "watch": "NODE_ENV=development node esbuild.config.js",
-    "test": "env NODE_ENV=testing mocha"
+    "test": "env NODE_ENV=test mocha"
   }
 }
