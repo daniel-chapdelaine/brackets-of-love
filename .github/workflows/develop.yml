@@ -16,11 +16,13 @@ env:
   MYSQL_DATABASE: ${{ secrets.DEV_MYSQL_DATABASE }}
   GITHUB_SHA: ${{ github.sha }} 
   IMAGE: "${{ secrets.GCP_PROJECT }}/develop"
+  RAILS_ENV: develop
+  NODE_ENV: develop
   REGISTRY_HOSTNAME: us.gcr.io
 
 jobs:
-  test:
-    name: Test
+  test-rails:
+    name: Rails Tests
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -59,6 +61,28 @@ jobs:
         DB_PASSWORD: ""
         DB_DATABASE: test-brackets-of-love
 
+  test-react:
+    name: React Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Run install
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: install # will run `yarn install` command
+
+    - name: Test the app
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: test # will run `yarn test` command
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -72,12 +96,6 @@ jobs:
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
-
-      # - id: 'get-credentials'
-      #   uses: 'google-github-actions/get-gke-credentials@v1'
-      #   with:
-      #     cluster_name: '${{ secrets.GCP_CLUSTER }}'
-      #     location: '${{ secrets.GCP_LOCATION }}'
       
       - name: Login to GCR
         uses: docker/login-action@v2
@@ -93,7 +111,9 @@ jobs:
           export TAG=`echo $GITHUB_SHA | awk -F/ '{print $NF}'`
           echo $TAG
           docker build -t "$REGISTRY_HOSTNAME"/"$IMAGE":"$TAG" \
-            --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} . 
+            --build-arg RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
+            --build-arg RAILS_ENV=$RAILS_ENV \
+            --build-arg NODE_ENV=$NODE_ENV . 
 
       - name: Publish
         if: ${{ github.event_name == 'push' }}
@@ -106,7 +126,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: ['test', 'build']
+    needs: ['test-rails', 'test-react', 'build']
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:

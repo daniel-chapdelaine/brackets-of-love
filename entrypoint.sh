@@ -8,7 +8,7 @@
 
 # Pre-comple app assets
 # sh ./config/docker/asset-pre-compile.sh
-bundle exec rails assets:precompile
+# bundle exec rails assets:precompile
 
 # Start Application
 bundle exec rails s
