@@ -20,6 +20,7 @@ services:
       context: ./
       dockerfile: local.Dockerfile
     command: ./bin/dev
+    tty: true
     environment:
       DB_HOST: db
       DB_PORT: 3306

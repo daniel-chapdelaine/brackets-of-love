@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-import path from 'path'
 import esbuild from 'esbuild'
 
 const env = process.env['NODE_ENV']
@@ -16,7 +14,7 @@ const buildContext = {
   outdir: "./app/assets/builds",
 }
 
-if (env === 'development') {
+if (process.argv.includes("--watch")) {
   let ctx = await esbuild.context(buildContext).catch(() => process.exit(1))
   await ctx.watch();
 } 
