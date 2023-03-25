@@ -115,8 +115,6 @@ jobs:
             --build-arg RAILS_ENV=${{ RAILS_ENV }} \
             --build-arg NODE_ENV=${{ NODE_ENV }} . 
 
-  RAILS_ENV: develop
-  NODE_ENV: develop
       - name: Publish
         if: ${{ github.event_name == 'push' }}
         run: |
