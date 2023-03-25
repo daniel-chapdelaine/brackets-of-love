@@ -17,7 +17,7 @@ env:
   GITHUB_SHA: ${{ github.sha }} 
   IMAGE: "${{ secrets.GCP_PROJECT }}/develop"
   RAILS_ENV: develop
-  RAILS_SERVE_STATIC_FILES: 'true'
+  RAILS_SERVE_STATIC_FILES: true
   REGISTRY_HOSTNAME: us.gcr.io
 
 jobs:
