@@ -1,6 +1,8 @@
 FROM ruby:3.1
 
 ARG RAILS_MASTER_KEY
+ARG RAILS_ENV
+ARG NODE_ENV
 
 # Environment Variables
 ENV GEM_HOME="/usr/local/bundle"
@@ -36,7 +38,7 @@ RUN yarn install --check-files
 
 COPY . .
 
-RUN yarn build-develop
+RUN yarn build
 RUN bundle exec rails assets:precompile
 
 EXPOSE 3000
