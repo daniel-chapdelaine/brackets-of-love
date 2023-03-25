@@ -31,7 +31,7 @@ RUN bundle install
 
 # React
 RUN npm install -g yarn
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock esbuild.config.js ./
 RUN yarn install --check-files
 RUN yarn build-develop
 
