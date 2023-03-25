@@ -33,9 +33,10 @@ RUN bundle install
 RUN npm install -g yarn
 COPY package.json yarn.lock esbuild.config.js ./
 RUN yarn install --check-files
-RUN yarn build-develop
 
 COPY . .
+
+RUN yarn build-develop
 
 EXPOSE 3000
 
