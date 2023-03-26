@@ -66,13 +66,13 @@ Install docker/kubectl/minikube/kubectx/kubens
 3. Start tunnel for port forwarding
 `minikube tunnel`
 4. Deploy kube files
+5. Point minikube at your local image (not docker repository) `minikube docker-env`
 
 ## TODO
   - when deploying prod don't forget to add:   
       `config.hosts << "url-of-brackets-of-love.k8s.com" `
   - google cloud budget
   - set up seeder
-
 
 ## Help
 How to get on a pod `kubectl exec -it pod-name /bin/bash`
