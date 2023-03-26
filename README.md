@@ -1,5 +1,13 @@
 # Welcome to the Brackets of Love Repo! 
 
+## The Stack
+### Backend
+Ruby/Rails, Mysql, Rspec, Esbuild
+### Frontend
+React, Typescript, Tailwind, CSS, Mocha
+* note on css, use tailwind as much as possible for styling, however when using css, create class names prefixed with the component or file name such as `dialog-header` rather than just `header`. I don't plan on dealing with css collisions so make sure classes are unique! 
+### CI/CD
+Docker, Kubernetes, Google Cloud, Github Actions 
 
 ## Local Development
 You have two options, install everything on your local machine
@@ -21,14 +29,20 @@ bundle exec rails db:create:all db:schema:load
 // 
 
 ```
-*Note: any time you want to run a single command using docker-compose I suggest using test-app and the --rm. By using test-app you wont kill your regular app pod and --rm with automatically remove the test-app pod when the command has run.
+*Note: any time you want to run a single command using docker-compose I suggest using test-app or test-react with the --rm option. By using these you wont kill your regular app pod and --rm will automatically remove the test-app pod when the command has run.
 
 ## Local Unit Testing
+Ruby (Rspec) Tests
 ```
 RAILS_ENV=test bundle exec rspec
 or 
 RAILS_ENV=test docker-compose run --rm test-app bundle exec rspec
-
+```
+React (Mocha) Tests
+```
+yarn test
+or 
+docker-compose run --rm test-react yarn test
 ```
 
 ## Deployment Methodology
@@ -43,7 +57,7 @@ RAILS_ENV=test docker-compose run --rm test-app bundle exec rspec
 6. Once satisfied, get [this guy's](https://github.com/daniel-chapdelaine) label on your PR and you are good to merge to main
 
 
-## Minikube for Develop/Prod
+## Minikube for Develop/Prod (this is not a common)
 Install docker/kubectl/minikube/kubectx/kubens
 1. Start minikube which create a kubernetes environment locally
 `minikube start`
@@ -57,10 +71,7 @@ Install docker/kubectl/minikube/kubectx/kubens
   - when deploying prod don't forget to add:   
       `config.hosts << "url-of-brackets-of-love.k8s.com" `
   - google cloud budget
-  - set up tests in githubactions
   - set up seeder
-
-
 
 
 ## Help
