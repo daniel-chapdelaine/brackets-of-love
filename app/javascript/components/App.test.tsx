@@ -7,6 +7,6 @@ import { App } from "./App";
 it("Render Test", async () => {
     render(<App arg={'howdy'}/>);
 
-    const helloText = await screen.getByText("OH, hello, howdy!");
+    const helloText = await screen.getByText("Oh hello, howdy!");
     expect(helloText).to.be.not.null;
 });
