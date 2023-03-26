@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import './App.css'
 
 interface AppProps {
   arg: string;
@@ -8,8 +7,8 @@ interface AppProps {
 
 export const App = ({ arg }: AppProps) => {
   return (
-    <div className="title text-3xl font-bold underline">
-      {`Oh hello , ${arg}!`}
+    <div className="app-title text-3xl font-bold underline">
+      {`Oh hello, ${arg}!`}
     </div>
    );
 };

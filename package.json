@@ -28,6 +28,7 @@
     "autoprefixer": "^10.4.14",
     "chai": "^4.3.7",
     "chokidar": "^3.5.3",
+    "ignore-styles": "^5.0.1",
     "jsdom": "^21.1.1",
     "jsdom-global": "^3.0.2",
     "mocha": "^10.2.0",
@@ -41,6 +42,6 @@
     "build": "node esbuild.config.js",
     "build:css": "npx tailwindcss --postcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css",
     "watch": "NODE_ENV=development node esbuild.config.js",
-    "test": "env NODE_ENV=test mocha"
+    "test": "env NODE_ENV=test mocha --require ignore-styles"
   }
 }
