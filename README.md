@@ -1,5 +1,7 @@
 # Welcome to the Brackets of Love Repo! 
 
+[Trello Tickets](https://trello.com/b/oLHttbn1/brackets-of-love)
+
 ## The Stack
 ### Backend
 Ruby/Rails, Mysql, Rspec, Esbuild
